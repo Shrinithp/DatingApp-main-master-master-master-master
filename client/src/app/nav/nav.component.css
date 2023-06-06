@@ -1,0 +1,10 @@
+/* //create cursor as pointer instaed of link */
+.dropdown-toggle, .dropdown-item{
+    cursor:pointer;
+}
+
+img{
+    max-height: 50px;
+    border: 2px soild white;
+    display: inline;
+}

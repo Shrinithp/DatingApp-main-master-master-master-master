@@ -1,0 +1,101 @@
+<div class="row" *ngIf="member">
+    <!-- col-4 takes 1/4 of the space -->
+    <div class="col-4">
+        <h1>Your Profile</h1>
+    </div>
+        <div class="col-8">
+            <div class="alert alert-info" *ngIf="editForm.dirty">
+                <!-- i donot want to display this unless i make any changes in the form -->
+                <!-- so use dirty -->
+                <p><strong>Information: </strong>save changes if you have made any changes</p>
+            </div>
+        </div>
+    <div class="col-4">
+        <div class="card">
+                <!-- || is used if member does not have photo -->
+        <img src="{{member.photoUrl || './assets/user.png' }}" alt="{{member.knownAs}}"
+        class="card-ing-top img-thumbnail">
+        <div class="card-body">
+           <div>
+               <strong>Location:</strong>
+               <p>{{member.city}}, {{member.country}}</p>
+           </div>
+
+           <div>
+               <strong>Age:</strong>
+               <p>{{member.age}}</p>
+           </div>
+
+
+           <div>
+               <strong>last active:</strong>
+               <p>{{member.lastActive +'Z' | timeago}}</p>
+           </div>
+
+           <div>
+               <strong>Member since:</strong>
+               <p>{{member.created | date}}</p>
+           </div>
+
+
+        </div>
+
+         <!-- i donot want to display this unless i make any changes in the form -->
+        <!-- so use dirty -->
+        <div class="card-footer" >
+            <!-- this button is related to form so im using form id here -->
+            <button type="submit" [disabled] ="!editForm.dirty" form="editForm" class="btn btn-success col-12">Save changes</button>
+        </div>
+    </div>
+        
+
+    </div>
+
+    <div class="col-8">
+        <!-- table is a angular component and css is encalpuslated we cannot override them so we create class -->
+        <tabset class="member-tabset">
+            <tab heading="About {{member.knownAs}}">
+
+                <!-- here i cannot change name to some other name -->
+                <!-- if not it will not bind the chnages after update -->
+
+                <form #editForm="ngForm" id="editForm" (ngSubmit)="updateMember()">
+                    <h4 class="mt-2">Description</h4>
+                    <!-- two way binding populate existing details for user[()] -->
+                    <textarea class="form-control" [(ngModel)]="member.introduction"
+                    name="introduction" rows="6"
+                    ></textarea>
+
+                    <h4 class="mt-2">Looking For</h4>
+                    <textarea class="form-control" [(ngModel)]="member.lookingFor"
+                    name="lookingFor" rows="6"
+                    ></textarea>
+
+                    <h4 class="mt-2">Interests</h4>
+                    <!-- two way binding populate existing details for user[()] -->
+                    <textarea class="form-control" [(ngModel)]="member.interests"
+                    name="interests" rows="6"
+                    ></textarea>
+
+                    <h4 class="mt-2">Location details</h4>
+                   <div class="d-flex flex-row align-items-center">
+                        <label for="city">City</label>
+                        <input for="text" [(ngModel)]="member.city" name="city" class="form-control mx-2">
+
+                        <label for="country">Country</label>
+                        <input for="text" [(ngModel)]="member.country" name="country" class="form-control mx-2">
+                    </div>
+                </form>
+                
+            </tab> 
+            <tab heading="Edit photos">
+                
+                <app-photo-editor [member]="member"></app-photo-editor>
+            </tab> 
+
+        </tabset>
+    </div>
+
+ </div>
+
+

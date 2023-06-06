@@ -1,0 +1,75 @@
+
+ <div class="row" *ngIf="member">
+    <!-- col-4 takes 1/4 of the space -->
+    <div class="col-4">
+        <div class="card">
+                <!-- || is used if member does not have photo -->
+        <img src="{{member.photoUrl || './assets/user.png' }}" alt="{{member.knownAs}}"
+        class="card-ing-top img-thumbnail">
+        <div class="card-body">
+           <div>
+               <strong>Location:</strong>
+               <p>{{member.city}}, {{member.country}}</p>
+           </div>
+
+           <div>
+               <strong>Age:</strong>
+               <p>{{member.age}}</p>
+           </div>
+
+
+           <div>
+               <strong>last active:</strong>
+               <!-- browser uses local time server return utc time -->
+               <p>{{member.lastActive | timeago}}</p>
+           </div>
+
+           <div>
+               <strong>Member since:</strong>
+               <p>{{member.created | date}}</p>
+           </div>
+
+
+        </div>
+
+        <div class="card-footer">
+           <div class="btn-group d-flex">
+               <button class="btn btn-primary">Like</button>
+               <button class="btn btn-success">Messages</button>
+           </div>
+        </div>
+        </div>
+        
+
+    </div>
+
+    <div class="col-8">
+        <!-- table is a angular component and css is encalpuslated we cannot override them so we create class -->
+        <tabset class="member-tabset">
+            <tab heading="About {{member.knownAs}}">
+                <h4>Description</h4>
+                <p>{{member.introduction}}</p>
+                <h4>Looking for</h4>
+                <p>{{member.lookingFor}}</p>
+            </tab> 
+
+            <tab heading="Interest">
+                <h4>Interest</h4>
+                <p>{{member.interests}}</p>
+            </tab> 
+
+            <tab heading="Photos">
+                <!-- this is done referring to ngx galler document. -->
+                <!-- https://github.com/kolkov/ngx-gallery -->
+                <ngx-gallery [options]="galleryOptions" [images]="galleryImages" class="ngx-gallery" ></ngx-gallery>
+            </tab>
+            
+            <tab heading="Messages">
+                <p>messsages will go here</p>
+            </tab> 
+
+        </tabset>
+    </div>
+
+ </div>
+
