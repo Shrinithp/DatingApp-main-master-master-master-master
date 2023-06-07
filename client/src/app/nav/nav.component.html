@@ -6,7 +6,11 @@
           <!-- content inside ng container is not going to be visible -->
           <ng-container *ngIf="accountService.currentUser$ |async" dropdown>
             <li class="nav-item">
-              <a class="nav-link active" routerLink="/members" routerLinkActive="active">Matches</a>
+               <!-- Matches nav should not be highlighted when we we are inside messages -->
+               <!-- so we are using routerLinkActiveOptions -->
+              <a class="nav-link active"
+              [routerLinkActiveOptions]="{exact:true}"
+              routerLink="/members" routerLinkActive="active">Matches</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" routerLink="/lists" routerLinkActive="active">Lists</a>
