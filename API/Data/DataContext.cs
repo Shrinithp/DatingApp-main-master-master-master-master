@@ -1,8 +1,15 @@
 using API.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
- namespace API.Data
+
+namespace API.Data
 {
-    public class DataContext:DbContext
+
+    //order should be same aswell.
+    public class DataContext: IdentityDbContext<AppUser, AppRole, int,
+    IdentityUserClaim<int>, AppUserRole, IdentityUserLogin<int>,
+    IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
         //creating a class.
         public DataContext(DbContextOptions options): base(options)
@@ -10,7 +17,6 @@ using Microsoft.EntityFrameworkCore;
 
         }
         //our table name is going to be users and the columns inside our User table are column for Id and column for users(inside AppUsers)
-        public DbSet<AppUser> Users { get; set;}
 
         public DbSet<UserLike> Likes { get; set;}
 
@@ -19,6 +25,22 @@ using Microsoft.EntityFrameworkCore;
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+
+        //each role can have many users inside a particluar role. Each user can be a member of many roles
+            builder.Entity<AppUser>()
+            .HasMany(ur=>ur.UserRoles)
+            .WithOne(u => u.User)
+            .HasForeignKey(ur=>ur.UserId)
+            .IsRequired();
+            
+
+
+             builder.Entity<AppRole>()
+            .HasMany(ur=>ur.UserRoles)
+            .WithOne(u => u.Role)
+            .HasForeignKey(ur=>ur.RoleId)
+            .IsRequired();
 
             builder.Entity<UserLike>()
             .HasKey(k=>new {k.SourceUserId, k.TargetUserId});

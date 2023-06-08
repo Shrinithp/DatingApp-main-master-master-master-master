@@ -52,6 +52,11 @@ export class AccountService {
   }
 
   setCurrentUser(user:User){
+    user.roles = [];
+    const roles = this.getDecodedToken(user.token).role;// "role" is defined in our token we cannot change that
+
+    //if role is array then first part of ternary operation. if not array second part.
+    Array.isArray(roles) ? user.roles = roles: user.roles.push(roles);
     localStorage.setItem('user', JSON.stringify(user))
     this.currentUserSource.next(user);
   }
@@ -60,5 +65,10 @@ export class AccountService {
 logout(){
   localStorage.removeItem('user');
   this.currentUserSource.next(null);
+}
+
+getDecodedToken(token : string) {
+  //1 indicate middle part of the token
+  return JSON.parse(atob(token.split('.')[1]))
 }
 }

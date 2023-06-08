@@ -1,19 +1,13 @@
 using API.Extensions;
+using Microsoft.AspNetCore.Identity;
 
 namespace API.Entities
 {
-    public class AppUser
+    public class AppUser: IdentityUser<int>
     {
         //use the same convention as ID because entity framework is based on convention based.
         //if i give theId instead ID then have say that externally that theID is a key.
-        //[key] should be written if we use other name,
-        public int Id{get; set;}
-
-        public string UserName{get; set;}
-
-        public byte[] PasswordHash{get; set;}
-
-        public byte[] PasswordSalt{get; set;}
+        //[key] should be written if we use other name. B.sec-16
 
        public string Gender { get; set; }
 
@@ -47,6 +41,11 @@ namespace API.Entities
         public List<Message>  MessagesSent {get; set;}
 
         public List<Message>  MessagesReceived {get;set;}
+        
+
+        //navigation property to our join table which is our AppUserRole
+
+        public ICollection<AppUserRole> UserRoles { get; set; }
         
 
 

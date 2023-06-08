@@ -12,12 +12,17 @@ import { MemberDetailComponent } from './members/member-detail/member-detail.com
 import { MemberEditComponent } from './members/member-edit/member-edit.component';
 import { PreventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.guard';
 import { MemberDetailedResolver } from './_resolvers/member-detailed.resolver';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
+import { AdminGuard } from './_guards/admin.guard';
 
 const routes: Routes = [
   //making these links auth guards
 {path:'',component:HomeComponent},
 {path:'',
   runGuardsAndResolvers:'always',
+
+
+  //if we are not authenticated then we donot have access to any of these paths
   canActivate:[AuthGuard],
   children:[
   {path:'members',component:MemberListComponent},
@@ -25,6 +30,9 @@ const routes: Routes = [
   {path:'member/edit',component:MemberEditComponent, canDeactivate:[PreventUnsavedChangesGuard]},
   {path:'lists',component:ListsComponent},
   {path:'messages',component:MessagesComponent},
+
+  //if we want to get inside admin authorize and authentication required
+  {path:'admin',component:AdminPanelComponent, canActivate: [AdminGuard]},
   ]
     
 },

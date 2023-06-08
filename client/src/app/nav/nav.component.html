@@ -19,6 +19,11 @@
               <a class="nav-link" routerLink="/messages" routerLinkActive="active">Messages</a>
             </li>
 
+            <!-- apphasrole works similar to *ngif but we define our own directive -->
+            <li *appHasRole="['Admin', 'Moderator']" class="nav-item">
+              <a class="nav-link" routerLink="/admin" routerLinkActive="active">Admin</a>
+            </li>
+
           </ng-container>
 
           
