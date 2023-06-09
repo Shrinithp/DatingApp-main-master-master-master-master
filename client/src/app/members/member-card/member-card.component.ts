@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { Member } from 'src/app/_models/member';
 import { MembersService } from 'src/app/_services/members.service';
+import { PresenceService } from 'src/app/_services/presence.service';
 
 @Component({
   selector: 'app-member-card',
@@ -13,8 +14,8 @@ export class MemberCardComponent implements OnInit{
   //give it as undefined.
   @Input() member: Member | undefined;
 
-  
-  constructor(private memberService: MembersService){}
+  //presenceService is made public so we can use async pipe
+  constructor(private memberService: MembersService, public presenceService: PresenceService){}
 
   ngOnInit(): void {
   }

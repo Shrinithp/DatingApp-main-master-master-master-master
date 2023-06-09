@@ -14,11 +14,11 @@ export class MemberMessagesComponent implements OnInit {
   //username as input because its a child of member detail component
   @Input() username?: string;
   //we are going to pass down to member messages component
-  @Input() messages: Message[]=[];
+
   messageContent='';
 
 
-  constructor(private messageService: MessageService) {
+  constructor(public messageService: MessageService) {
   }
 
 
@@ -27,12 +27,10 @@ export class MemberMessagesComponent implements OnInit {
 
   sendMessage(){
     if(!this.username) return;
-    this.messageService.sendMessage(this.username, this.messageContent).subscribe({
-      next:message=>{
-        this.messages.push(message);
+    this.messageService.sendMessage(this.username, this.messageContent).then(() =>{
         this.messageForm?.reset();
-      }
-    })
+      })
+    
   }
 
   

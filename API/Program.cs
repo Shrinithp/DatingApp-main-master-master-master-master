@@ -2,6 +2,7 @@ using API.Data;
 using API.Entities;
 using API.Extensions;
 using API.Middleware;
+using API.SignalR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,12 +22,19 @@ var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
-app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod()
+app.UseCors(builder => builder
+.AllowAnyHeader()
+.AllowAnyMethod()
+.AllowCredentials()
 .WithOrigins("http://localhost:4200"));
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<PresenceHub>("hubs/presence"); //same should be there in client side (service)
+app.MapHub<MessageHub>("hubs/message"); //same should be there in client side (service)
+
 using var scope =app.Services.CreateScope();
 var services = scope.ServiceProvider;
 
@@ -38,6 +46,9 @@ try
     //Asynchronously applies any pending migrations for 
     //the context to the database and Will create the database if it does not already exist.
     await context.Database.MigrateAsync();
+
+    //remove all previous connections when app crashes
+    await context.Database.ExecuteSqlRawAsync("DELETE FROM [CONNECTIONS]");
     await Seed.SeedUsers(userManager, roleManager);
 }
 
